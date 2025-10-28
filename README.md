@@ -569,15 +569,6 @@ var abrLadder = []struct {
 
 ## 📝 Development Notes
 
-### Time Breakdown (4 hours)
-
-- **Architecture & Design:** 30 min
-- **Core Video Conversion:** 1 hour
-- **API Implementation:** 1 hour
-- **GCS Integration:** 45 min
-- **Docker & CI/CD:** 30 min
-- **Testing & Documentation:** 45 min
-
 ### Trade-offs Made
 
 1. **Synchronous vs Async:** Chose sync for simplicity, knowing it's not production-ready for large files
@@ -586,26 +577,3 @@ var abrLadder = []struct {
 4. **No database:** Uses GCS metadata files - simpler but limited query capability
 5. **60-min signed URLs:** Balance between security and UX
 
-## 📄 License
-
-MIT License - feel free to use for your projects!
-
-## 👥 Contributing
-
-Contributions welcome! Areas that need help:
-- Async processing implementation
-- Advanced search with filters
-- Authentication system
-- Performance optimizations
-- Test coverage
-
-## 🆘 Support
-
-For issues or questions:
-- Check logs: `gcloud run logs read hls-converter-api`
-- GCP Console: Cloud Run service logs
-- GitHub Issues: [Create an issue]
-
----
-
-**Built with ❤️ for high-quality video streaming**
