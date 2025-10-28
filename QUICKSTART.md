@@ -14,7 +14,7 @@ Get the HLS Video Converter API running in 5 minutes!
 
 ```bash
 # Clone repository
-git clone <repo-url>
+git clone https://github.com/yabetsu93/hls-converter-api.git
 cd hls-converter-api
 
 # Create sample video (optional)
