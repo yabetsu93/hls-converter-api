@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - BUCKET_NAME=${BUCKET_NAME:-assignment-bucket}
+      - GOOGLE_APPLICATION_CREDENTIALS=/credentials/service-account.json
+    volumes:
+      # Mount service account credentials if available
+      - ${GOOGLE_APPLICATION_CREDENTIALS:-./service-account.json}:/credentials/service-account.json:ro
+      # Mount temporary storage for videos
+      - video-storage:/tmp/videos
+    restart: unless-stopped
+
+volumes:
+  video-storage:

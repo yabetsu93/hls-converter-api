@@ -1,0 +1,252 @@
+{
+  "info": {
+    "name": "HLS Video Converter API",
+    "description": "API collection for testing the HLS Video Converter service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1234567"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains service name\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.service).to.eql(\"HLS Video Converter API\");",
+              "    pm.expect(jsonData.status).to.eql(\"running\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": ["{{base_url}}"]
+        },
+        "description": "Check if the API is running"
+      },
+      "response": []
+    },
+    {
+      "name": "Upload Video",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains video metadata\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"id\");",
+              "    pm.expect(jsonData).to.have.property(\"status\");",
+              "    pm.expect(jsonData).to.have.property(\"master_playlist_url\");",
+              "    pm.expect(jsonData).to.have.property(\"renditions\");",
+              "    ",
+              "    // Save video ID for subsequent requests",
+              "    pm.environment.set(\"video_id\", jsonData.id);",
+              "});",
+              "",
+              "pm.test(\"Video has multiple renditions\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.renditions).to.be.an('array');",
+              "    pm.expect(jsonData.renditions.length).to.be.at.least(1);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "description": "MP4 video file to upload",
+              "type": "file",
+              "src": "/path/to/sample.mp4"
+            },
+            {
+              "key": "title",
+              "value": "Test Video",
+              "description": "Optional title for the video",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/videos",
+          "host": ["{{base_url}}"],
+          "path": ["videos"]
+        },
+        "description": "Upload an MP4 video for HLS conversion"
+      },
+      "response": []
+    },
+    {
+      "name": "List All Videos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has correct structure\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"total\");",
+              "    pm.expect(jsonData).to.have.property(\"videos\");",
+              "    pm.expect(jsonData.videos).to.be.an('array');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/videos?limit=10&offset=0",
+          "host": ["{{base_url}}"],
+          "path": ["videos"],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Number of results to return"
+            },
+            {
+              "key": "offset",
+              "value": "0",
+              "description": "Offset for pagination"
+            }
+          ]
+        },
+        "description": "List all videos with pagination"
+      },
+      "response": []
+    },
+    {
+      "name": "Search Videos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Search results match query\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.videos).to.be.an('array');",
+              "    ",
+              "    // Verify each result contains the search term",
+              "    jsonData.videos.forEach(function(video) {",
+              "        var query = pm.request.url.query.get('q').toLowerCase();",
+              "        var matches = video.filename.toLowerCase().includes(query) || ",
+              "                     video.title.toLowerCase().includes(query);",
+              "        pm.expect(matches).to.be.true;",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/videos?q=test&limit=5",
+          "host": ["{{base_url}}"],
+          "path": ["videos"],
+          "query": [
+            {
+              "key": "q",
+              "value": "test",
+              "description": "Search query"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        },
+        "description": "Search videos by filename or title"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Video Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains complete video details\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"id\");",
+              "    pm.expect(jsonData).to.have.property(\"filename\");",
+              "    pm.expect(jsonData).to.have.property(\"title\");",
+              "    pm.expect(jsonData).to.have.property(\"duration\");",
+              "    pm.expect(jsonData).to.have.property(\"master_playlist_url\");",
+              "    pm.expect(jsonData).to.have.property(\"renditions\");",
+              "});",
+              "",
+              "pm.test(\"All renditions have signed URLs\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    jsonData.renditions.forEach(function(rendition) {",
+              "        pm.expect(rendition.url).to.exist;",
+              "        pm.expect(rendition.url).to.include('https://');",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/videos/{{video_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["videos", "{{video_id}}"]
+        },
+        "description": "Get details of a specific video (uses video_id from environment)"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
