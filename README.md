@@ -4,6 +4,12 @@ A production-ready Go service that converts MP4 videos to HLS (HTTP Live Streami
 
 ## 🚀 Quick Start
 
+## Improvements:
+- Terraform
+- Ansible for deployment and setup
+- Use go stream to chunk to accommodate fetching all videos and video
+- GCP integration
+
 ### Prerequisites
 - Docker & Docker Compose
 - Go 1.24+ (for local development)
