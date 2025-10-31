@@ -34,7 +34,7 @@ cd hls-converter-api
 ```bash
 # Download your service account JSON key
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-export BUCKET_NAME=assignment-bucket
+export BUCKET_NAME=xxxxx
 ```
 
 3. **Run with Docker Compose**
@@ -68,8 +68,8 @@ gcloud run deploy hls-converter-api \
   --memory 2Gi \
   --cpu 2 \
   --timeout 3600 \
-  --set-env-vars BUCKET_NAME=assignment-bucket \
-  --service-account assignments@reddotdrone.jp
+  --set-env-vars BUCKET_NAME=xxxx \
+  --service-account xxxx
 ```
 
 ## 📋 API Documentation
