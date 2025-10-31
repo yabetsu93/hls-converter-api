@@ -4,6 +4,12 @@ A production-ready Go service that converts MP4 videos to HLS (HTTP Live Streami
 
 ## 🚀 Quick Start
 
+### **Problems:** ###
+- ❌ Loads all metadata files into memory at once
+- ❌ No protection against large files
+- ❌ Can cause memory exhaustion with many videos
+- ❌ No chunked processing
+
 ## Improvements:
 - Terraform
 - Ansible for deployment and setup
